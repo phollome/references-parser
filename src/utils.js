@@ -1,7 +1,7 @@
 /**
  * Parse passed reference
  * @param {string} reference
- * @returns {{author: string, title: string, publisher: string, href: string|null}|null}
+ * @returns {{author: string, title: string, publisher: string, href: string|null}}
  */
 export function parseReference(reference) {
   const author = reference.slice(0, reference.indexOf(":")); // [Author]: Title. Publisher.
@@ -10,7 +10,7 @@ export function parseReference(reference) {
       .slice(0, reference.lastIndexOf(".")) // [Author: Title. Publisher].
       .split(".") // ["Author: Title", " Publisher"]
       .pop() // " Publisher"
-      .trimStart(), //" [Publisher]"
+      .trimStart(), // " [Publisher]"
     href,
   } = parseLink(reference);
 
@@ -35,5 +35,21 @@ function parseLink(reference) {
     return { publisher, href };
   } else {
     return { href: null };
+  }
+}
+
+/**
+ * Validate parsed result of reference
+ * @param {string} reference
+ * @param {{author: string, title: string, publisher: string, href: string|null}} result
+ * @returns {boolean}
+ */
+export function isReferenceResultValid(reference, result) {
+  if (result.href !== null) {
+    return reference === `${result.author}: ${result.title}. ${result.href}.`;
+  } else {
+    return (
+      reference === `${result.author}: ${result.title}. ${result.publisher}.`
+    );
   }
 }

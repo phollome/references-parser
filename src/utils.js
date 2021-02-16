@@ -28,14 +28,20 @@ export function parseReference(reference) {
  */
 function parseLink(reference) {
   const urlIndex = reference.indexOf("http");
-  if (urlIndex > -1) {
-    const url = new URL(reference.slice(urlIndex)); // Author. Title. [http://website.com/article.]
-    const publisher = url.hostname; // http://[website.com]/article.
-    const href = reference.slice(urlIndex, -1); // [http://website.com/article].
-    return { publisher, href };
-  } else {
-    return { href: null };
+  try {
+    if (urlIndex > -1) {
+      const url = new URL(reference.slice(urlIndex)); // Author. Title. [http://website.com/article.]
+      const publisher = url.hostname; // http://[website.com]/article.
+      const href = reference.slice(urlIndex, -1); // [http://website.com/article].
+      return { publisher, href };
+    }
+  } catch (err) {
+    // ignore error caused by URL constructor
+    if (err.message !== "Failed to construct 'URL': Invalid URL") {
+      console.error(err);
+    }
   }
+  return { href: null };
 }
 
 /**

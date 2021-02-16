@@ -1,7 +1,13 @@
-import "./App.css";
+import React from "react";
+import Input from "./components/Input";
+import ParserResult from "./components/ParserResult";
 
 function App() {
-  return null;
+  return (
+    <Input>
+      <ParserResult />
+    </Input>
+  );
 }
 
 export default App;
